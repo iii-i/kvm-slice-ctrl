@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e -u -x
+cd "$(dirname "$0")"/linux
+export PATH=../qemu/build:"$PATH"
+mkdir -p ../workdir
+../virtme-ng/vng \
+	--console=3497 \
+	--cpus="$(( $(getconf _NPROCESSORS_ONLN) * 2 ))" \
+	--cwd=../workdir \
+	--name=kvm-slice-ctrl \
+	--rwdir=../workdir \
+	"$@"

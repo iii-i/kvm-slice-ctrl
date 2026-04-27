@@ -1,0 +1,9 @@
+[submodule "linux"]
+	path = linux
+	url = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+[submodule "virtme-ng"]
+	path = virtme-ng
+	url = https://github.com/arighi/virtme-ng.git
+[submodule "qemu"]
+	path = qemu
+	url = https://gitlab.com/qemu-project/qemu.git

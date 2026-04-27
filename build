@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e -u -x
+
+cd "$(dirname "$0")"/linux
+[ -e .config ] || ../virtme-ng/vng --config=../config --kconfig
+../virtme-ng/vng --build
+
+cd tools/perf
+make -j"$(nproc)"
+
+cd ../../../qemu
+[ -e build/Makefile ] || ./configure --disable-docs --disable-tcg --enable-kvm
+make -j"$(nproc)"
