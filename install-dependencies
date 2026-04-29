@@ -3,5 +3,11 @@ set -e -u -x
 sudo apt-get update
 sudo apt-get build-dep linux qemu
 sudo apt-get install -y \
+	clang \
 	dbench \
-	libcapstone-dev
+	libbabeltrace-dev \
+	libcapstone-dev \
+	libdebuginfod-dev \
+	libpfm4-dev \
+	llvm-dev \
+	systemtap-sdt-dev
