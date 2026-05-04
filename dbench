@@ -1,4 +1,35 @@
 #!/bin/sh
 set -e -u -x
 cd "$(dirname "$0")"/workdir
-exec dbench -t 10 "$(getconf _NPROCESSORS_ONLN)"
+sudo mkdir -p tmpfs
+while sudo umount ./tmpfs; do :; done
+sudo mount -t tmpfs -o size=4G tmpfs tmpfs
+cd tmpfs
+traced_relay_pid=
+traced_probes_pid=
+cleanup() {
+	# Make sure perfetto sends a flush.
+	sleep 2
+	if [ -n "$traced_probes_pid" ]; then
+		sudo kill "$traced_probes_pid"
+		wait "$traced_probes_pid" || true
+	fi
+	if [ -n "$traced_relay_pid" ]; then
+		kill "$traced_relay_pid"
+		wait "$traced_relay_pid" || true
+	fi
+}
+trap cleanup EXIT
+# shellcheck disable=SC2024
+env \
+	PERFETTO_MACHINE_NAME=_guest \
+	PERFETTO_RELAY_SOCK_NAME=vsock://2:10001 \
+	"$(command -v tracebox)" traced_relay \
+	</dev/null >../traced_relay_guest.log 2>&1 &
+traced_relay_pid=$!
+# shellcheck disable=SC2024
+sudo env \
+	"$(command -v tracebox)" traced_probes \
+	</dev/null >../traced_probes_guest.log 2>&1 &
+traced_probes_pid=$!
+dbench -t 10 "$(getconf _NPROCESSORS_ONLN)"

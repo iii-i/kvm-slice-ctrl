@@ -1,0 +1,33 @@
+write_into_file: true
+file_write_period_ms: 500
+write_flush_mode: WRITE_FLUSH_ENABLED
+
+buffers {
+  size_kb: 16384
+}
+
+data_sources {
+  config {
+    name: "linux.ftrace"
+    ftrace_config {
+      ftrace_events: "kvm/kvm_entry"
+      ftrace_events: "kvm/kvm_exit"
+      buffer_size_kb: 4096
+    }
+  }
+  machine_name_filter: "_host"
+}
+
+data_sources {
+  config {
+    name: "linux.ftrace"
+    ftrace_config {
+      ftrace_events: "lock/lock_acquire"
+      ftrace_events: "lock/lock_contended"
+      ftrace_events: "lock/lock_acquired"
+      ftrace_events: "lock/lock_release"
+      buffer_size_kb: 4096
+    }
+  }
+  machine_name_filter: "_guest"
+}
