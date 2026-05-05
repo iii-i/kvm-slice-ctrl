@@ -1,5 +1,6 @@
 write_into_file: true
 file_write_period_ms: 500
+flush_period_ms: 500
 write_flush_mode: WRITE_FLUSH_ENABLED
 
 buffers {
