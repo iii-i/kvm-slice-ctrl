@@ -5,7 +5,7 @@ mkdir -p ../workdir
 exec taskset --cpu-list 0-3 ../virtme-ng/vng \
 	--cpus=8 \
 	--cwd=../workdir \
-	--memory=12G \
+	--memory=16G \
 	--name=kvm-slice-ctrl \
 	--ssh=10002 \
 	--rwdir=../workdir \
