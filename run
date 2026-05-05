@@ -51,7 +51,7 @@ env \
 	</dev/null >../workdir/perfetto_host.log 2>&1 &
 perfetto_pid=$!
 ../virtme-ng/vng \
-	--console=3497 \
+	--ssh=10002 \
 	--cpus="$(($(getconf _NPROCESSORS_ONLN) * 2))" \
 	--cwd=../workdir \
 	--memory=8G \
