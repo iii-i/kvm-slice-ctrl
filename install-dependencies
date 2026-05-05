@@ -5,6 +5,7 @@ sudo apt-get build-dep linux qemu
 sudo apt-get install -y \
 	clang \
 	dbench \
+	inotify-tools \
 	libbabeltrace-dev \
 	libcapstone-dev \
 	libdebuginfod-dev \

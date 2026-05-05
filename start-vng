@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e -u -x
 cd "$(dirname "$0")"
-./vng-run sleep inf </dev/null >workdir/vng.log 2>&1 &
+echo 0 >workdir/vng_ready
+./vng-run "echo 1 >vng_ready && sleep inf" </dev/null >workdir/vng.log 2>&1 &
 pid=$!
-rm -f workdir/vng-ping.log
-while ! ./console -- true </dev/null >>workdir/vng-ping.log 2>&1; do sleep 1; done
+inotifywait workdir/vng_ready -e modify >/dev/null
 echo "$pid"
