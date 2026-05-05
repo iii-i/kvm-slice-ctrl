@@ -27,6 +27,7 @@ data_sources {
       ftrace_events: "lock/lock_contended"
       ftrace_events: "lock/lock_acquired"
       ftrace_events: "lock/lock_release"
+      ftrace_events: "sched/sched_process_exec"
       buffer_size_kb: 262144
     }
   }
