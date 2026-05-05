@@ -6,10 +6,15 @@ mkdir -p ../workdir
 traced_pid=
 traced_probes_pid=
 perfetto_pid=
+vng_pid=
 cleanup() {
 	if [ -n "$perfetto_pid" ]; then
 		kill "$perfetto_pid"
 		wait "$perfetto_pid" || true
+	fi
+	if [ -n "$vng_pid" ]; then
+		../console -- sudo poweroff --force || true
+		wait "$vng_pid" || true
 	fi
 	if [ -n "$traced_probes_pid" ]; then
 		sudo kill "$traced_probes_pid"
@@ -24,13 +29,6 @@ trap cleanup EXIT
 tracebox=$(command -v tracebox)
 traced_pid=$(../start-traced-host "$tracebox")
 traced_probes_pid=$(sudo ../start-traced-probes-host "$tracebox")
+vng_pid=$(../start-vng)
 perfetto_pid=$(../start-perfetto-host "$tracebox")
-../virtme-ng/vng \
-	--ssh=10002 \
-	--cpus="$(($(getconf _NPROCESSORS_ONLN) * 2))" \
-	--cwd=../workdir \
-	--memory=8G \
-	--name=kvm-slice-ctrl \
-	--rwdir=../workdir \
-	"$@"
 chown "$(id -u):$(id -g)" ../workdir/perfetto.trace
