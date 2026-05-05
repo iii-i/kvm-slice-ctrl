@@ -2,7 +2,7 @@
 set -e -u -x
 cd "$(dirname "$0")"
 echo 0 >workdir/vng_ready
-./vng-run "echo 1 >vng_ready && sleep inf" </dev/null >workdir/vng.log 2>&1 &
+./vng-run "echo 1 >vng_ready && sudo phc2sys -s /dev/ptp0 -O 0" </dev/null >workdir/vng.log 2>&1 &
 pid=$!
 inotifywait workdir/vng_ready -e modify >/dev/null
 echo "$pid"

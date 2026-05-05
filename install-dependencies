@@ -10,5 +10,6 @@ sudo apt-get install -y \
 	libcapstone-dev \
 	libdebuginfod-dev \
 	libpfm4-dev \
+	linuxptp \
 	llvm-dev \
 	systemtap-sdt-dev

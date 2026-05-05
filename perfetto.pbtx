@@ -13,6 +13,7 @@ data_sources {
     ftrace_config {
       ftrace_events: "kvm/kvm_entry"
       ftrace_events: "kvm/kvm_exit"
+      ftrace_events: "kvm/kvm_msr"
       buffer_size_kb: 4096
     }
   }
@@ -27,6 +28,7 @@ data_sources {
       ftrace_events: "lock/lock_contended"
       ftrace_events: "lock/lock_acquired"
       ftrace_events: "lock/lock_release"
+      ftrace_events: "msr/write_msr"
       ftrace_events: "sched/sched_process_exec"
       buffer_size_kb: 262144
     }

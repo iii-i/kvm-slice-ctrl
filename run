@@ -7,11 +7,25 @@ traced_pid=
 traced_probes_pid=
 vng_pid=
 perfetto_pid=
+trace_cmd_guest_pid=
+trace_cmd_host_pid=
 cleanup() {
+	if [ -n "$trace_cmd_host_pid" ]; then
+		sudo kill "$trace_cmd_host_pid"
+	fi
+	if [ -n "$trace_cmd_guest_pid" ]; then
+		../console -- sudo kill "$trace_cmd_guest_pid"
+	fi
+	if [ -n "$trace_cmd_host_pid" ]; then
+		while [ -d /proc/"$trace_cmd_host_pid" ]; do sleep 1; done
+		sudo chown "$(id -u):$(id -g)" ../workdir/trace-host.dat
+	fi
+	if [ -n "$trace_cmd_guest_pid" ]; then
+		while ../console -- [ -d /proc/"$trace_cmd_guest_pid" ]; do sleep 1; done
+	fi
 	if [ -n "$perfetto_pid" ]; then
 		kill "$perfetto_pid"
 		wait "$perfetto_pid" || true
-		chown "$(id -u):$(id -g)" ../workdir/perfetto.trace
 	fi
 	if [ -n "$vng_pid" ]; then
 		../console -- sudo poweroff --force || true
@@ -27,11 +41,19 @@ cleanup() {
 	fi
 }
 trap cleanup EXIT
-tracebox=$(command -v tracebox)
-traced_pid=$(../start-traced-host "$tracebox")
-traced_probes_pid=$(sudo ../start-traced-probes-host "$tracebox")
-vng_pid=$(../start-vng)
-../console -- ../start-traced-relay-guest "$tracebox" >/dev/null
-../console -- sudo ../start-traced-probes-guest "$tracebox" >/dev/null
-perfetto_pid=$(../start-perfetto-host "$tracebox")
+if [ "${TRACER-}" = "perfetto" ]; then
+	tracebox=$(command -v tracebox)
+	traced_pid=$(../start-traced-host "$tracebox")
+	traced_probes_pid=$(sudo ../start-traced-probes-host "$tracebox")
+	vng_pid=$(../start-vng)
+	../console -- ../start-traced-relay-guest "$tracebox" >/dev/null
+	../console -- sudo ../start-traced-probes-guest "$tracebox" >/dev/null
+	perfetto_pid=$(../start-perfetto-host "$tracebox")
+elif [ "${TRACER-}" = "trace-cmd" ]; then
+	vng_pid=$(../start-vng)
+	trace_cmd_guest_pid=$(../console -- sudo ../start-trace-cmd-guest)
+	trace_cmd_host_pid=$(sudo ../start-trace-cmd-host)
+else
+	vng_pid=$(../start-vng)
+fi
 ../console -- ../dbench

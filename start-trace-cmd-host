@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e -u -x
+cd "$(dirname "$0")"
+stdbuf -i0 -o0 -e0 trace-cmd record \
+	-b 10000 \
+	-C tai \
+	-e kvm/kvm_entry \
+	-e kvm/kvm_exit \
+	-e kvm/kvm_msr \
+	-o workdir/trace-host.dat \
+	</dev/null >workdir/trace_cmd_host.log 2>&1 &
+while ! grep --perl-regexp "\AHit Ctrl" workdir/trace_cmd_host.log >/dev/null; do
+	sleep 1
+done
+echo "$!"
