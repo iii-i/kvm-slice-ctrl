@@ -5,4 +5,4 @@ sudo mkdir -p tmpfs
 while sudo umount ./tmpfs; do :; done
 sudo mount -t tmpfs -o size=4G tmpfs tmpfs
 cd tmpfs
-dbench -t 10 "$(getconf _NPROCESSORS_ONLN)"
+dbench -t 4 "$(getconf _NPROCESSORS_ONLN)"

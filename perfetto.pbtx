@@ -4,7 +4,7 @@ flush_period_ms: 500
 write_flush_mode: WRITE_FLUSH_ENABLED
 
 buffers {
-  size_kb: 524288
+  size_kb: 262144
 }
 
 data_sources {
@@ -27,7 +27,7 @@ data_sources {
       ftrace_events: "lock/lock_contended"
       ftrace_events: "lock/lock_acquired"
       ftrace_events: "lock/lock_release"
-      buffer_size_kb: 1048576
+      buffer_size_kb: 262144
     }
   }
   machine_name_filter: "_guest"
