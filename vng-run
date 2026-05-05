@@ -10,4 +10,5 @@ exec taskset --cpu-list 0-3 ../virtme-ng/vng \
 	--name=kvm-slice-ctrl \
 	--rwdir=../workdir \
 	--user="$USER" \
+	--verbose \
 	"$@"
