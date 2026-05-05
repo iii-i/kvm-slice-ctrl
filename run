@@ -5,12 +5,13 @@ export PATH=../qemu/build:"$PATH"
 mkdir -p ../workdir
 traced_pid=
 traced_probes_pid=
-perfetto_pid=
 vng_pid=
+perfetto_pid=
 cleanup() {
 	if [ -n "$perfetto_pid" ]; then
 		kill "$perfetto_pid"
 		wait "$perfetto_pid" || true
+		chown "$(id -u):$(id -g)" ../workdir/perfetto.trace
 	fi
 	if [ -n "$vng_pid" ]; then
 		../console -- sudo poweroff --force || true
@@ -30,5 +31,7 @@ tracebox=$(command -v tracebox)
 traced_pid=$(../start-traced-host "$tracebox")
 traced_probes_pid=$(sudo ../start-traced-probes-host "$tracebox")
 vng_pid=$(../start-vng)
+../console -- ../start-traced-relay-guest "$tracebox" >/dev/null
+../console -- sudo ../start-traced-probes-guest "$tracebox" >/dev/null
 perfetto_pid=$(../start-perfetto-host "$tracebox")
-chown "$(id -u):$(id -g)" ../workdir/perfetto.trace
+../console -- ../dbench

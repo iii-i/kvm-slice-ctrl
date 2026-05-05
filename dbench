@@ -5,22 +5,4 @@ sudo mkdir -p tmpfs
 while sudo umount ./tmpfs; do :; done
 sudo mount -t tmpfs -o size=4G tmpfs tmpfs
 cd tmpfs
-traced_relay_pid=
-traced_probes_pid=
-cleanup() {
-	# Make sure perfetto sends a flush.
-	sleep 2
-	if [ -n "$traced_probes_pid" ]; then
-		sudo kill "$traced_probes_pid"
-		wait "$traced_probes_pid" || true
-	fi
-	if [ -n "$traced_relay_pid" ]; then
-		kill "$traced_relay_pid"
-		wait "$traced_relay_pid" || true
-	fi
-}
-trap cleanup EXIT
-tracebox=$(command -v tracebox)
-traced_relay_pid=$(../../start-traced-relay-guest "$tracebox")
-traced_probes_pid=$(sudo ../../start-traced-probes-guest "$tracebox")
 dbench -t 10 "$(getconf _NPROCESSORS_ONLN)"
