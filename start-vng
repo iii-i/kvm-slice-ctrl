@@ -3,6 +3,6 @@ set -e -u -x
 cd "$(dirname "$0")"
 ./vng-run sleep inf </dev/null >workdir/vng.log 2>&1 &
 pid=$!
-rm -f ../workdir/vng-ping.log
+rm -f workdir/vng-ping.log
 while ! ./console -- true </dev/null >>workdir/vng-ping.log 2>&1; do sleep 1; done
 echo "$pid"

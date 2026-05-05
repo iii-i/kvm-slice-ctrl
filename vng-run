@@ -2,9 +2,9 @@
 set -e -u -x
 cd "$(dirname "$0")"/linux
 mkdir -p ../workdir
-exec ../virtme-ng/vng \
+exec taskset --cpu-list 0-3 ../virtme-ng/vng \
 	--ssh=10002 \
-	--cpus="$(($(getconf _NPROCESSORS_ONLN) * 2))" \
+	--cpus=8 \
 	--cwd=../workdir \
 	--memory=8G \
 	--name=kvm-slice-ctrl \
