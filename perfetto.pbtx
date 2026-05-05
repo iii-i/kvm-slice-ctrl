@@ -4,7 +4,7 @@ flush_period_ms: 500
 write_flush_mode: WRITE_FLUSH_ENABLED
 
 buffers {
-  size_kb: 16384
+  size_kb: 524288
 }
 
 data_sources {
