@@ -26,7 +26,7 @@ data_sources {
       ftrace_events: "lock/lock_contended"
       ftrace_events: "lock/lock_acquired"
       ftrace_events: "lock/lock_release"
-      buffer_size_kb: 4096
+      buffer_size_kb: 1048576
     }
   }
   machine_name_filter: "_guest"

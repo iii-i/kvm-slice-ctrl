@@ -6,7 +6,7 @@ exec taskset --cpu-list 0-3 ../virtme-ng/vng \
 	--ssh=10002 \
 	--cpus=8 \
 	--cwd=../workdir \
-	--memory=8G \
+	--memory=12G \
 	--name=kvm-slice-ctrl \
 	--rwdir=../workdir \
 	--user="$USER" \
