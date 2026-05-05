@@ -21,35 +21,10 @@ cleanup() {
 	fi
 }
 trap cleanup EXIT
-rm -f ../workdir/traced_host_ready
-mkfifo ../workdir/traced_host_ready
-# shellcheck disable=SC2024
-env \
-	PERFETTO_CONSUMER_SOCK_NAME=../workdir/consumer_host.sock \
-	PERFETTO_MACHINE_NAME=_host \
-	PERFETTO_PRODUCER_SOCK_NAME=../workdir/producer_host.sock,vsock://-1:10001 \
-	TRACED_NOTIFY_FD=3 \
-	"$(command -v tracebox)" traced --enable-relay-endpoint \
-	</dev/null >../workdir/traced_host.log 2>&1 3>../workdir/traced_host_ready &
-traced_pid=$!
-if [ "$(dd if=../workdir/traced_host_ready bs=1 count=1)" != "1" ]; then
-	exit 1
-fi
-# shellcheck disable=SC2024
-sudo env \
-	PERFETTO_PRODUCER_SOCK_NAME=../workdir/producer_host.sock \
-	"$(command -v tracebox)" traced_probes \
-	</dev/null >../workdir/traced_probes_host.log 2>&1 &
-traced_probes_pid=$!
-# shellcheck disable=SC2024
-env \
-	PERFETTO_CONSUMER_SOCK_NAME=../workdir/consumer_host.sock \
-	"$(command -v tracebox)" perfetto \
-	--config ../perfetto.pbtx \
-	--txt \
-	--out ../workdir/perfetto.trace \
-	</dev/null >../workdir/perfetto_host.log 2>&1 &
-perfetto_pid=$!
+tracebox=$(command -v tracebox)
+traced_pid=$(../start-traced-host "$tracebox")
+traced_probes_pid=$(sudo ../start-traced-probes-host "$tracebox")
+perfetto_pid=$(../start-perfetto-host "$tracebox")
 ../virtme-ng/vng \
 	--ssh=10002 \
 	--cpus="$(($(getconf _NPROCESSORS_ONLN) * 2))" \

@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e -u -x
+cd "$(dirname "$0")"
+mkdir -p workdir
+rm -f workdir/perfetto_host_ready
+mkfifo workdir/perfetto_host_ready
+# shellcheck disable=SC2024
+env \
+	PERFETTO_CONSUMER_SOCK_NAME=workdir/consumer_host.sock \
+	"$1" perfetto \
+	--config perfetto.pbtx \
+	--notify-fd=3 \
+	--out workdir/perfetto.trace \
+	--txt \
+	</dev/null >workdir/perfetto_host.log 2>&1 3>workdir/perfetto_host_ready &
+pid=$!
+if [ "$(dd if=workdir/perfetto_host_ready bs=1 count=1 |
+	od --address-radix=n --format=u |
+	tr -d ' ')" != "0" ]; then
+	exit 1
+fi
+echo "$pid"

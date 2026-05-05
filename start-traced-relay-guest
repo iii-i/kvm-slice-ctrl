@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e -u -x
+cd "$(dirname "$0")"
+mkdir -p workdir
+rm -f workdir/traced_relay_guest_ready
+mkfifo workdir/traced_relay_guest_ready
+# shellcheck disable=SC2024
+env \
+	PERFETTO_MACHINE_NAME=_guest \
+	PERFETTO_RELAY_SOCK_NAME=vsock://2:10001 \
+	TRACED_RELAY_NOTIFY_FD=3 \
+	"$1" traced_relay \
+	</dev/null >workdir/traced_relay_guest.log 2>&1 3>workdir/traced_relay_guest_ready &
+pid=$!
+if [ "$(dd if=workdir/traced_relay_guest_ready bs=1 count=1)" != "1" ]; then
+	exit 1
+fi
+echo "$pid"

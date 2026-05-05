@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e -u -x
+cd "$(dirname "$0")"
+find_scripts() {
+	git grep --name-only --null --perl-regexp '\A#!/bin/sh'
+}
+find_scripts | xargs -0 shellcheck
+find_scripts | xargs -0 shfmt -w
