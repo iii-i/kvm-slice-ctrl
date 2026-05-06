@@ -12,4 +12,5 @@ sudo apt-get install -y \
 	libpfm4-dev \
 	linuxptp \
 	llvm-dev \
+	nlohmann-json3-dev \
 	systemtap-sdt-dev
