@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e -u -x
+case "$(uname -m)" in
+x86_64)
+	echo "kvm/kvm_msr"
+	;;
+s390x)
+	echo "kvm/kvm_s390_handle_diag"
+	;;
+*)
+	exit 1
+	;;
+esac

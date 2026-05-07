@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e -u -x
+case "$(uname -m)" in
+x86_64)
+	echo "msr/write_msr"
+	;;
+s390x)
+	echo "s390/s390_diagnose"
+	;;
+*)
+	exit 1
+	;;
+esac

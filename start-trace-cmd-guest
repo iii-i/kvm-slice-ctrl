@@ -8,7 +8,7 @@ stdbuf -i0 -o0 -e0 trace-cmd record \
 	-e lock/lock_contended \
 	-e lock/lock_acquired \
 	-e lock/lock_release \
-	-e msr/write_msr \
+	-e "$(./guest-correlation-trace)" \
 	-e sched/sched_process_exec \
 	-o workdir/trace-guest.dat \
 	--temp /tmp/ \
