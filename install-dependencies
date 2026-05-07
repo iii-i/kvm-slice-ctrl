@@ -13,4 +13,6 @@ sudo apt-get install -y \
 	linuxptp \
 	llvm-dev \
 	nlohmann-json3-dev \
+	shellcheck \
+	shfmt \
 	systemtap-sdt-dev
