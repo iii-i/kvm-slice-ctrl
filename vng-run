@@ -3,6 +3,7 @@ set -e -u -x
 cd "$(dirname "$0")"/linux
 mkdir -p ../workdir
 exec taskset --cpu-list 0-3 ../virtme-ng/vng \
+	--qemu-bin=../qemu/build/qemu-system-x86_64 \
 	--cpus=8 \
 	--cwd=../workdir \
 	--memory=16G \
@@ -11,4 +12,5 @@ exec taskset --cpu-list 0-3 ../virtme-ng/vng \
 	--rwdir=../workdir \
 	--user="$USER" \
 	--verbose \
+	--qemu-opt=-device --qemu-opt=kvm-slice-ctrl \
 	"$@"
