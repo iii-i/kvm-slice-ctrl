@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e -u -x
 cd "$(dirname "$0")"/linux
-export PATH=../qemu/build:"$PATH"
 mkdir -p ../workdir
 traced_pid=
 traced_probes_pid=
