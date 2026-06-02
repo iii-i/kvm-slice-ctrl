@@ -11,3 +11,11 @@ make -j"$(nproc)"
 cd ../../../qemu
 [ -e build/Makefile ] || ./configure --disable-docs --disable-tcg --enable-kvm
 make -j"$(nproc)"
+
+cd ../bpftrace
+[ -e build/CMakeCache.txt ] || cmake -B build \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DBUILD_TESTING=OFF \
+	-DENABLE_MAN=OFF \
+	-DENABLE_SKB_OUTPUT=OFF
+make -C build -j"$(nproc)"

@@ -7,3 +7,6 @@
 [submodule "qemu"]
 	path = qemu
 	url = https://gitlab.com/qemu-project/qemu.git
+[submodule "bpftrace"]
+	path = bpftrace
+	url = https://github.com/bpftrace/bpftrace.git

@@ -4,8 +4,8 @@ sudo apt-get update
 sudo apt-get install -y \
 	acpica-tools \
 	bc \
+	binutils-dev \
 	bison \
-	bpftrace \
 	ccache \
 	clang \
 	cmake \
@@ -24,12 +24,16 @@ sudo apt-get install -y \
 	libbabeltrace-ctf-dev \
 	libbabeltrace-dev \
 	libbpf-dev \
+	libbpfcc-dev \
 	libbrlapi-dev \
 	libbz2-dev \
 	libcacard-dev \
 	libcap-ng-dev \
 	libcapstone-dev \
 	libcbor-dev \
+	libcereal-dev \
+	libclang-cpp-dev \
+	libclang-dev \
 	libcurl4-openssl-dev \
 	libdaxctl-dev \
 	libdebuginfod-dev \
@@ -42,6 +46,7 @@ sudo apt-get install -y \
 	libglusterfs-dev \
 	libgtk-3-dev \
 	libgvnc-1.0-dev \
+	libiberty-dev \
 	libibverbs-dev \
 	libiscsi-dev \
 	libjack-dev \
@@ -86,6 +91,7 @@ sudo apt-get install -y \
 	nlohmann-json3-dev \
 	openjdk-25-jdk-headless \
 	openssh-server \
+	pahole \
 	pkg-config \
 	python3-argcomplete \
 	python3-dev \
