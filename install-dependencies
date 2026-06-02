@@ -6,6 +6,7 @@ sudo apt-get install -y \
 	bc \
 	binutils-dev \
 	bison \
+	busybox \
 	ccache \
 	clang \
 	cmake \
